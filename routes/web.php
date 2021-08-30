@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/{any}', function() {
-        return view('app');
-    })->where('any', '.*');
+Route::get('/', function () {
+    return view('top');
+});
+
+Route::get('/search', function () {
+    $title = '変数名の検索';
+    return view('search', compact('title'));
+});
+
+Route::get('/naming', [App\Http\Controllers\NamingController::class, '__invoke'])->name('naming');
+Route::post('/naming', [\App\Http\Controllers\NamingPostController::class, '__invoke'])->name('naming-post');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/home', [App\Http\Controllers\BookmarkController::class, '__invoke'])->name('bookmark');
